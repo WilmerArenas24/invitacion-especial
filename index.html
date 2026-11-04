@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una propuesta especial</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: Georgia, serif;
+    color: white;
+    background: radial-gradient(
+        ellipse at top,
+        #4b2638,
+        #241a24 55%,
+        #121116
+    );
+    overflow: hidden;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    padding: 45px 25px;
+    text-align: center;
+    border: 1px solid rgba(243,184,206,.25);
+    border-radius: 25px;
+    background: rgba(25,21,28,.9);
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+
+.eyebrow {
+    color: #d9afc0;
+    font: 600 11px Arial;
+    letter-spacing: 4px;
+}
+
+h1 {
+    font-size: 38px;
+    font-weight: normal;
+    line-height: 1.2;
+    margin: 25px 0 18px;
+}
+
+.description {
+    color: #dfd2d9;
+    font: 15px/1.7 Arial;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+button {
+    border: none;
+    border-radius: 30px;
+    padding: 16px 23px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#yes {
+    background: #a83d69;
+    color: white;
+}
+
+#yes:hover {
+    background: #bd4d7d;
+}
+
+#no {
+    background: #39343d;
+    color: white;
+}
+
+.hint {
+    color: #aa9ba5;
+    font: 12px Arial;
+    margin-top: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+.success h1 {
+    color: #f3b8ce;
+}
+
+.success p {
+    color: #eadde3;
+    font: 16px/1.8 Arial;
+}
+
+.success .final {
+    color: #f3b8ce;
+    font-size: 20px;
+    margin-top: 25px;
+}
+
+.confetti {
+    position: fixed;
+    top: -20px;
+    animation: fall 3s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="invitation">
+
+    <div class="eyebrow">
+        UNA PROPUESTA ESPECIAL
+    </div>
+
+    <h1>
+        Tengo una pregunta para ti...
+    </h1>
+
+    <p class="description">
+        ¿Te gustaría que nos viéramos? 😉
+        <br><br>
+        Sin compromisos, sin discursos y con
+        altas probabilidades de pasarla
+        bastante bien.
+    </p>
+
+    <div class="buttons">
+        <button id="yes">
+            ¡Me apunto! 😏
+        </button>
+
+        <button id="no">
+            NO SUEÑES 🙃
+        </button>
+    </div>
+
+    <p class="hint" id="hint">
+        P.D. Ambos botones tienen personalidades diferentes...
+    </p>
+
+</div>
+
+<div class="card success hidden" id="success">
+
+    <div style="font-size:35px">
+        🥂 ✨
+    </div>
+
+    <div class="eyebrow">
+        RESPUESTA REGISTRADA
+    </div>
+
+    <h1>
+        ¡VAYA, VAYA! 😏
+    </h1>
+
+    <p>
+        ¡No puedo creer que hayas dicho que sí!
+    </p>
+
+    <p class="final">
+        Ahora pongámosle fecha a esta buena decisión. 🥂
+    </p>
+
+</div>
+
+<script>
+
+const noButton = document.getElementById("no");
+const yesButton = document.getElementById("yes");
+
+const invitation = document.getElementById("invitation");
+const success = document.getElementById("success");
+const hint = document.getElementById("hint");
+
+const phrases = [
+    "¿Segura? 🤨",
+    "Por ahí no es 😂",
+    "Inténtalo otra vez 😏",
+    "Ese botón tiene otros planes..."
+];
+
+let attempts = 0;
+
+function moveNo() {
+
+    const width = noButton.offsetWidth;
+    const height = noButton.offsetHeight;
+
+    const x = Math.random() *
+        (window.innerWidth - width - 30) + 15;
+
+    const y = Math.random() *
+        (window.innerHeight - height - 30) + 15;
+
+    noButton.style.position = "fixed";
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+    noButton.style.zIndex = "10";
+
+    hint.textContent =
+        phrases[attempts % phrases.length];
+
+    attempts++;
+}
+
+noButton.addEventListener("pointerenter", moveNo);
+
+noButton.addEventListener("pointerdown", function(event) {
+    event.preventDefault();
+    moveNo();
+});
+
+noButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    moveNo();
+});
+
+function celebrate() {
+
+    invitation.classList.add("hidden");
+    success.classList.remove("hidden");
+
+    const symbols = ["✦", "♥", "✧", "●"];
+
+    for (let i = 0; i < 65; i++) {
+
+        const confetti = document.createElement("span");
+
+        confetti.className = "confetti";
+
+        confetti.textContent =
+            symbols[Math.floor(Math.random() * symbols.length)];
+
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.animationDelay = Math.random() + "s";
+
+        confetti.style.color = [
+            "#f3b8ce",
+            "#dca3bb",
+            "#e8d7a8",
+            "#ffffff"
+        ][Math.floor(Math.random() * 4)];
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 4000);
+    }
+}
+
+yesButton.addEventListener("click", celebrate);
+
+</script>
+
+</body>
+</html>
